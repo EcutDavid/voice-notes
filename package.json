@@ -1,0 +1,16 @@
+{
+  "name": "study-notes",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "startLocal": "AWS_SDK_LOAD_CONFIG=true node build.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.512.0"
+  }
+}

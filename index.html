@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+    <style>
+      body,
+      html {
+        margin: 0;
+        height: 100%;
+      }
+
+      #buttons {
+        padding: 50px;
+        height: calc(100% - 54px);
+        box-sizing: border-box;
+        overflow: auto;
+      }
+
+      button {
+        width: 100%;
+        padding: 4px;
+        margin: 10px;
+      }
+
+      audio {
+        width: 100%;
+        height: 54px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="buttons"></div>
+    <audio src="" controls></audio>
+    <script>
+      function filenameToTitle(key) {
+        return key.split('.')[0].replace(/_/g, ' ');
+      }
+
+      const audio = document.querySelector("audio");
+      fetch(
+        "https://polly-voice-notes.s3-ap-southeast-2.amazonaws.com/manifest.json"
+      )
+        .then(d => d.json())
+        .then(ret => {
+          const notes = ret.notes;
+          notes.forEach(d => {
+            const button = document.createElement("button");
+            button.innerText = filenameToTitle(d.name);
+            button.className = "btn btn-outline-primary";
+            const url = `https://polly-voice-notes.s3-ap-southeast-2.amazonaws.com/${
+              d.key
+            }`;
+            button.addEventListener("click", () => {
+              audio.src = url;
+            });
+            const container = document.querySelector("#buttons");
+            container.append(button);
+          });
+        });
+    </script>
+  </body>
+</html>
