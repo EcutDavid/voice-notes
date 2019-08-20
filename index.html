@@ -38,6 +38,7 @@
     <div id="buttons"></div>
     <audio src="" controls></audio>
     <script>
+      const bucketUrl = 'https://polly-voice-notes.s3-ap-southeast-2.amazonaws.com/';
       function filenameToTitle(key) {
         const lastDotIndex = key.lastIndexOf('.');
         return key.slice(0, lastDotIndex).replace(/_/g, ' ');
@@ -54,9 +55,7 @@
             const button = document.createElement("button");
             button.innerText = filenameToTitle(d.name);
             button.className = "btn btn-outline-primary";
-            const url = `https://polly-voice-notes.s3-ap-southeast-2.amazonaws.com/${
-              d.key
-            }`;
+            const url = `${bucketUrl}${d.key}`;
             button.addEventListener("click", () => {
               audio.src = url;
             });
