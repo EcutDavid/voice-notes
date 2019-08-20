@@ -35,7 +35,6 @@ async function pollyTask(note, notes) {
 }
 
 async function getNotesInS3() {
-  let notes = [];
   try {
     const manifest = await s3
       .getObject({
@@ -43,13 +42,13 @@ async function getNotesInS3() {
         Key: manifestFileKey
       }).promise();
     const ret = JSON.parse(manifest.Body.toString());
-    notes  = ret.notes.map(d => d.name);
+    return ret.notes;
   } catch(e) {
     if (e.code !== "NoSuchKey") {
       throw e;
     }
   }
-  return notes;
+  return [];
 }
 
 async function getNotesInFs() {
@@ -58,7 +57,7 @@ async function getNotesInFs() {
 
 async function main() {
   const notes = await getNotesInS3();
-  const noteSet = new Set(notes);
+  const noteSet = new Set(notes.map(d => d.name));
   const notesToProcess = (await getNotesInFs()).filter(d => !noteSet.has(d));
 
   await Promise.all(notesToProcess.map(n => pollyTask(n, notes)));
