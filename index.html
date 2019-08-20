@@ -40,7 +40,8 @@
     <audio src="" controls></audio>
     <script>
       function filenameToTitle(key) {
-        return key.split('.')[0].replace(/_/g, ' ');
+        const lastDotIndex = key.lastIndexOf('.');
+        return key.slice(0, lastDotIndex).replace(/_/g, ' ');
       }
 
       const audio = document.querySelector("audio");
