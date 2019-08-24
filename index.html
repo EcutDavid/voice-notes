@@ -58,6 +58,7 @@
             const url = `${bucketUrl}${d.key}`;
             button.addEventListener("click", () => {
               audio.src = url;
+              audio.play();
             });
             const container = document.querySelector("#buttons");
             container.append(button);
