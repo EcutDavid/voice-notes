@@ -10,8 +10,7 @@
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     />
     <style>
-      body,
-      html {
+      body, html {
         margin: 0;
         height: 100%;
       }
@@ -38,16 +37,17 @@
     <div id="buttons"></div>
     <audio src="" controls></audio>
     <script>
+      const manifestUrl = 'https://polly-voice-notes.s3-ap-southeast-2.amazonaws.com/manifest.json';
       const bucketUrl = 'https://polly-voice-notes.s3-ap-southeast-2.amazonaws.com/';
+      const audio = document.querySelector("audio");
+      const container = document.querySelector("#buttons");
+
       function filenameToTitle(key) {
         const lastDotIndex = key.lastIndexOf('.');
         return key.slice(0, lastDotIndex).replace(/_/g, ' ');
       }
 
-      const audio = document.querySelector("audio");
-      fetch(
-        "https://polly-voice-notes.s3-ap-southeast-2.amazonaws.com/manifest.json"
-      )
+      fetch(manifestUrl)
         .then(d => d.json())
         .then(ret => {
           const notes = ret.notes;
@@ -60,7 +60,6 @@
               audio.src = url;
               audio.play();
             });
-            const container = document.querySelector("#buttons");
             container.append(button);
           });
         });
