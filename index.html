@@ -3,7 +3,6 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Voice Notes</title>
     <link
       rel="stylesheet"
@@ -38,7 +37,7 @@
     <audio src="" controls></audio>
     <script>
       const manifestUrl = 'https://polly-voice-notes.s3-ap-southeast-2.amazonaws.com/manifest.json';
-      const bucketUrl = 'https://polly-voice-notes.s3-ap-southeast-2.amazonaws.com/';
+      const bucketUrl = 'https://polly-voice-notes.s3-ap-southeast-2.amazonaws.com';
       const audio = document.querySelector("audio");
       const container = document.querySelector("#buttons");
 
@@ -55,7 +54,7 @@
             const button = document.createElement("button");
             button.innerText = filenameToTitle(d.name);
             button.className = "btn btn-outline-primary";
-            const url = `${bucketUrl}${d.key}`;
+            const url = `${bucketUrl}/${d.key}`;
             button.addEventListener("click", () => {
               audio.src = url;
               audio.play();
