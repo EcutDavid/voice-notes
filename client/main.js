@@ -33,9 +33,7 @@ createAuth0Client({
   const query = window.location.search;
   // Back from the login page.
   if (query.includes("code=") && query.includes("state=")) {
-    // Process the login state
     auth0.handleRedirectCallback().then(() => {
-      // Use replaceState to redirect the user away and remove the querystring parameters
       window.history.replaceState({}, document.title, "/");
       updateAuthUi(auth0);
     });
