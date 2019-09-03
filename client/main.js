@@ -1,5 +1,6 @@
 const loginBtn = document.querySelector("#loginBtn");
 const logoutBtn = document.querySelector("#logoutBtn");
+// TODO: inject config at build time when multi envs provisioned.
 const auth0Conifg = {
   domain: "davidguan.auth0.com",
   clientId: "luC7PVwEEmjBTCC3HUenRepY5U3Zgrru"
@@ -17,11 +18,17 @@ createAuth0Client({
   client_id: auth0Conifg.clientId
 }).then(auth0 => {
   updateAuthUi(auth0);
-  loginBtn.addEventListener('click', () => {
+  loginBtn.addEventListener("click", () => {
     auth0.loginWithRedirect({
       redirect_uri: window.location.origin
     });
-  })
+  });
+
+  logoutBtn.addEventListener("click", () => {
+    auth0.logout({
+      returnTo: window.location.origin
+    });
+  });
 
   const query = window.location.search;
   // Back from the login page.
