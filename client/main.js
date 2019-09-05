@@ -18,15 +18,16 @@ createAuth0Client({
   client_id: auth0Conifg.clientId
 }).then(auth0 => {
   updateAuthUi(auth0);
+  const pageCur = window.location.origin + window.location.pathname;
   loginBtn.addEventListener("click", () => {
     auth0.loginWithRedirect({
-      redirect_uri: window.location.origin
+      redirect_uri: pageCur
     });
   });
 
   logoutBtn.addEventListener("click", () => {
     auth0.logout({
-      returnTo: window.location.origin
+      returnTo: pageCur
     });
   });
 
