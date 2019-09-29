@@ -35,7 +35,11 @@ createAuth0Client({
   // Back from the login page.
   if (query.includes("code=") && query.includes("state=")) {
     auth0.handleRedirectCallback().then(() => {
-      window.history.replaceState({}, document.title, "/");
+      window.history.replaceState(
+        {},
+        document.title,
+        window.location.origin + window.location.pathname
+      );
       updateAuthUi(auth0);
     });
   }
