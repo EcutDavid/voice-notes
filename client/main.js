@@ -3,10 +3,11 @@ const logoutBtn = document.querySelector("#logoutBtn");
 const heading = document.querySelector(".cover-heading");
 
 // TODO: inject config at build time when multi envs provisioned.
+// (and prevent the two copies of config).
 const auth0Conifg = {
   domain: "davidguan.auth0.com",
   clientId: "luC7PVwEEmjBTCC3HUenRepY5U3Zgrru",
-  audience: "https://davidguan.me/test"
+  audience: "https://davidguan.app/voice-notes-app/api"
 };
 
 function updateAuthUi(auth0) {
@@ -24,9 +25,7 @@ function updateAuthUi(auth0) {
             }
           });
         })
-        .then(res => {
-          return res.json();
-        })
+        .then(res => res.json())
         .then(res => {
           setTimeout(() => {
             heading.innerText = res.message;
