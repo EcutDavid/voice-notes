@@ -1,3 +1,4 @@
+// TODO: add logging
 const http = require("http");
 const jwt = require("jsonwebtoken");
 const JwksClient = require("jwks-rsa");

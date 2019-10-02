@@ -19,7 +19,8 @@ function updateAuthUi(auth0) {
       auth0
         .getTokenSilently()
         .then(acc => {
-          return fetch("http://localhost:8080" + "/foo", {
+          // TODO: update API, as the path is...
+          return fetch("https://davidguan.app/8080" + "/foo", {
             headers: {
               Authorization: `Bearer ${acc}`
             }
