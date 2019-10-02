@@ -1,5 +1,7 @@
 const loginBtn = document.querySelector("#loginBtn");
 const logoutBtn = document.querySelector("#logoutBtn");
+const heading = document.querySelector(".cover-heading");
+
 // TODO: inject config at build time when multi envs provisioned.
 const auth0Conifg = {
   domain: "davidguan.auth0.com",
@@ -13,23 +15,29 @@ function updateAuthUi(auth0) {
     logoutBtn.disabled = !authed;
 
     if (authed) {
-      auth0.getTokenSilently().then(acc => {
-        return fetch("http://localhost:8080" + "/foo", {
-          headers: {
-            Authorization: `Bearer ${acc}`
-          }
+      auth0
+        .getTokenSilently()
+        .then(acc => {
+          return fetch("http://localhost:8080" + "/foo", {
+            headers: {
+              Authorization: `Bearer ${acc}`
+            }
+          });
+        })
+        .then(res => {
+          return res.json();
+        })
+        .then(res => {
+          setTimeout(() => {
+            heading.innerText = res.message;
+          }, 5e3);
         });
-      }).then(res => {
-        return res.text();
-      }).then(text => {
-        /* Just for fun */
-        const heading = document.querySelector(".cover-heading");
-        heading.innerText = text;
+
+      auth0.getUser().then(info => {
+        if (info.nickname) {
+          heading.innerText = `Hello ${info.nickname}`;
+        }
       });
-
-      // auth0.getUser().then(userInfo => {
-
-      // });
     }
   });
 }
@@ -65,4 +73,6 @@ createAuth0Client({
       updateAuthUi(auth0);
     });
   }
+
+  // TODO: handle the auth error case(query string would give clue).
 });
