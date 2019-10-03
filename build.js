@@ -7,7 +7,7 @@ const polly = new AWS.Polly();
 const s3 = new AWS.S3();
 const bucketName = "polly-voice-notes";
 const notesDir = "notes";
-const manifestFileKey = 'manifest.json';
+const manifestFileKey = "manifest.json";
 
 const pollyCommonParas = {
   OutputFormat: "mp3",

@@ -1,6 +1,35 @@
 const loginBtn = document.querySelector("#loginBtn");
 const logoutBtn = document.querySelector("#logoutBtn");
+const noteForm = document.querySelector("#noteForm");
+const submitTextBtn = document.querySelector("#submitTextBtn");
 const heading = document.querySelector(".cover-heading");
+const titleInput = document.querySelector("#titleInput");
+const contentInput = document.querySelector("#contentInput");
+
+function genHeaders({ acc }) {
+  const headers = {};
+  if (acc) {
+    headers["Authorization"] = `Bearer ${acc}`;
+  }
+  return headers;
+}
+
+function setupNoteForm(acc) {
+  noteForm.style.display = "block";
+  submitTextBtn.addEventListener("click", () => {
+    const title = titleInput.value;
+    const content = contentInput.value;
+    const postBody = JSON.stringify({ title, content });
+    fetch("http://localhost:8080/voice-notes", {
+      method: "POST",
+      headers: {
+        ...genHeaders({ acc }),
+        "Content-Type": "application/json"
+      },
+      body: postBody
+    });
+  });
+}
 
 // TODO: inject config at build time when multi envs provisioned.
 // (and prevent the two copies of config).
@@ -19,11 +48,9 @@ function updateAuthUi(auth0) {
       auth0
         .getTokenSilently()
         .then(acc => {
-          // TODO: update API, as the path is...
+          setupNoteForm(acc);
           return fetch("https://davidguan.app/voice-notes", {
-            headers: {
-              Authorization: `Bearer ${acc}`
-            }
+            headers: genHeaders({ acc })
           });
         })
         .then(res => res.json())
