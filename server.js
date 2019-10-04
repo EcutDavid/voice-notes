@@ -80,7 +80,7 @@ app.post("/voice-notes", validateRequest, jsonParser, (req, res) => {
     return res.end("Bad Request");
   }
   createVoiceNote(title, content, req.appUserId)
-    .then(() => { res.end("42"); })
+    .then(() => { res.end(); })
     .catch(() => {
       res.statusCode = 500;
       res.end("Internal Server Error");
