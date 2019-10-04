@@ -5,6 +5,8 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const JwksClient = require("jwks-rsa");
 
+const { createVoiceNote } = require("./voice-note");
+
 const app = express();
 const jsonParser = bodyParser.json();
 
@@ -47,6 +49,8 @@ const corsOptions = {
   }
 };
 
+const allowedSubs = new Set(["auth0|5d969898d2c2620c5573aa4f"]);
+
 app.use(cors(corsOptions));
 const validateRequest = function(req, res, next) {
   res.statusCode = 401;
@@ -54,11 +58,13 @@ const validateRequest = function(req, res, next) {
   const authParts = (req.headers["authorization"] || "").split(" ");
   if (authParts.length === 2 && authParts[0] === "Bearer") {
     jwt.verify(authParts[1], getJwtKey, jwtOptions, (err, decoded) => {
-      if (err) {
+      if (err || !allowedSubs.has(decoded.sub)) {
         res.end("Unauthorized");
         return;
       }
-      console.log("Successfully decoded a JWT token,", "at:", new Date());
+      console.log("Successfully decoded a JWT token for ", decoded.sub, "at:", new Date());
+      req.appUserId = decoded.sub;
+
       res.statusCode = 200;
       next();
     });
@@ -69,8 +75,16 @@ const validateRequest = function(req, res, next) {
 
 app.post("/voice-notes", validateRequest, jsonParser, (req, res) => {
   const { content, title } = req.body;
-  if (!content || !title) return res.end("TODO: 400");
-  res.end("42");
+  if (!content || !title) {
+    res.statusCode = 400;
+    return res.end("Bad Request");
+  }
+  createVoiceNote(title, content, req.appUserId)
+    .then(() => { res.end("42"); })
+    .catch(() => {
+      res.statusCode = 500;
+      res.end("Internal Server Error");
+    });
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
