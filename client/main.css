@@ -5,7 +5,7 @@ a:hover {
   color: #fff;
 }
 
-p {
+p, label {
   font-size: 1.25rem;
   font-weight: 300;
 }
@@ -43,7 +43,7 @@ body {
 }
 
 header {
-  flex-grow: 1;
+  margin-top: 16px;
 }
 
 main {

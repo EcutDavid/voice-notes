@@ -29,22 +29,32 @@
       <main role="main" class="inner cover">
         <h2 class="cover-heading"></h2>
         <br />
-        <button
-          href="#"
-          id="loginBtn"
-          class="btn btn-lg btn-secondary"
-          disabled="true"
-        >
+        <button id="loginBtn" class="btn btn-lg btn-secondary" disabled="true">
           Login
         </button>
-        <button
-          href="#"
-          id="logoutBtn"
-          class="btn btn-lg btn-secondary"
-          disabled="true"
-        >
+        <button id="logoutBtn" class="btn btn-lg btn-secondary" disabled="true">
           Logout
         </button>
+        <form id="noteForm" style="display: none">
+          <label for="title-input">Title</label>
+          <div class="input-group">
+            <input type="text" class="form-control" id="titleInput" required />
+          </div>
+          <label for="content-input">Content</label>
+          <div class="input-group">
+            <textarea
+              class="form-control"
+              rows="10"
+              required
+              id="contentInput"
+            ></textarea>
+          </div>
+          <input
+            id="submitTextBtn"
+            type="submit"
+            class="btn btn-lg btn-secondary"
+          />
+        </form>
       </main>
 
       <footer class="mastfoot mt-auto">
