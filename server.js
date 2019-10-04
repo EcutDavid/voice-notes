@@ -17,7 +17,6 @@ const jwksClient = JwksClient({
 // (and prevent the two copies of config).
 const auth0Conifg = {
   domain: "davidguan.auth0.com",
-  clientId: "luC7PVwEEmjBTCC3HUenRepY5U3Zgrru",
   audience: "https://davidguan.app/voice-notes-app/api"
 };
 const jwtOptions = {
@@ -33,30 +32,13 @@ function getJwtKey(header, callback) {
   });
 }
 
-function audioRequestHandler(req, res) {
-  const authParts = (req.headers["authorization"] || "").split(" ");
-  if (authParts.length === 2 && authParts[0] === "Bearer") {
-    jwt.verify(authParts[1], getJwtKey, jwtOptions, (err, decoded) => {
-      if (err) {
-        res.statusCode = 400; // Client auth failed.
-        res.end(":(");
-        return;
-      }
-      const ret = JSON.stringify({ message: "Welcome" });
-      res.end(ret);
-    });
-    return;
-  }
-  res.end();
-}
-
 const allowedOrigin = new Set([
   "http://localhost:3000",
   "https://davidguan.me"
 ]);
 const corsOptions = {
   origin: function(origin, callback) {
-    console.log(origin, new Date());
+    console.log("Request from:", origin, "at:", new Date());
     if (allowedOrigin.has(origin) !== -1 || !origin) {
       callback(null, true);
     } else {
@@ -66,8 +48,28 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.post("/voice-notes", jsonParser, (req, res) => {
-  console.log(req.body);
+const validateRequest = function(req, res, next) {
+  res.statusCode = 401;
+
+  const authParts = (req.headers["authorization"] || "").split(" ");
+  if (authParts.length === 2 && authParts[0] === "Bearer") {
+    jwt.verify(authParts[1], getJwtKey, jwtOptions, (err, decoded) => {
+      if (err) {
+        res.end("Unauthorized");
+        return;
+      }
+      console.log("Successfully decoded a JWT token,", "at:", new Date());
+      res.statusCode = 200;
+      next();
+    });
+    return;
+  }
+  res.end("Unauthorized");
+};
+
+app.post("/voice-notes", validateRequest, jsonParser, (req, res) => {
+  const { content, title } = req.body;
+  if (!content || !title) return res.end("TODO: 400");
   res.end("42");
 });
 

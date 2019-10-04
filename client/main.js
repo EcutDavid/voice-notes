@@ -5,6 +5,7 @@ const submitTextBtn = document.querySelector("#submitTextBtn");
 const heading = document.querySelector(".cover-heading");
 const titleInput = document.querySelector("#titleInput");
 const contentInput = document.querySelector("#contentInput");
+const API_URL_BASE = "https://davidguan.app";
 
 function genHeaders({ acc }) {
   const headers = {};
@@ -16,11 +17,12 @@ function genHeaders({ acc }) {
 
 function setupNoteForm(acc) {
   noteForm.style.display = "block";
-  submitTextBtn.addEventListener("click", () => {
+  submitTextBtn.addEventListener("click", event => {
+    event.preventDefault();
     const title = titleInput.value;
     const content = contentInput.value;
     const postBody = JSON.stringify({ title, content });
-    fetch("http://localhost:8080/voice-notes", {
+    fetch(`${API_URL_BASE}/voice-notes`, {
       method: "POST",
       headers: {
         ...genHeaders({ acc }),
@@ -49,15 +51,6 @@ function updateAuthUi(auth0) {
         .getTokenSilently()
         .then(acc => {
           setupNoteForm(acc);
-          return fetch("https://davidguan.app/voice-notes", {
-            headers: genHeaders({ acc })
-          });
-        })
-        .then(res => res.json())
-        .then(res => {
-          setTimeout(() => {
-            heading.innerText = res.message;
-          }, 5e3);
         });
 
       auth0.getUser().then(info => {

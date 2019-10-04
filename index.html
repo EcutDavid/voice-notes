@@ -35,26 +35,26 @@
         <button id="logoutBtn" class="btn btn-lg btn-secondary" disabled="true">
           Logout
         </button>
-        <div id="noteForm" style="display: none">
+        <form id="noteForm" style="display: none">
           <label for="title-input">Title</label>
           <div class="input-group">
-            <input type="text" class="form-control" id="titleInput" />
+            <input type="text" class="form-control" id="titleInput" required />
           </div>
           <label for="content-input">Content</label>
           <div class="input-group">
             <textarea
               class="form-control"
               rows="10"
+              required
               id="contentInput"
             ></textarea>
           </div>
-          <button
+          <input
             id="submitTextBtn"
+            type="submit"
             class="btn btn-lg btn-secondary"
-          >
-            Submit
-          </button>
-        </div>
+          />
+        </form>
       </main>
 
       <footer class="mastfoot mt-auto">
