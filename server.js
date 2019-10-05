@@ -5,7 +5,7 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const JwksClient = require("jwks-rsa");
 
-const { createVoiceNote } = require("./voice-note");
+const { createVoiceNote } = require("./voice-notes");
 
 const app = express();
 const jsonParser = bodyParser.json();
