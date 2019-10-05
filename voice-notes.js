@@ -28,9 +28,9 @@ async function createVoiceNote(title, content, userId) {
     .promise();
 
   const taskId = result.SynthesisTask.TaskId;
-  // We can periodically call `getSpeechSynthesisTask`
-  //    to check whether the task is really completed successfully,
-  //    but might be an overkill.
+  // TODO: periodically call `getSpeechSynthesisTask`
+  // to check whether the task is really completed successfully,
+  // and return the result only after that.
   notes.push({ name: title, key: `${taskId}.mp3`, userId: userId });
   console.log("Successfully sent a Polly task for ", title, "at:", new Date());
 

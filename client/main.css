@@ -50,6 +50,14 @@ main {
   flex-grow: 1;
 }
 
+.input-group {
+  margin-bottom: 10px;
+}
+
+#submitTextSpinner {
+  display: none;
+}
+
 .nav-masthead .nav-link {
   padding: 0.25rem 0;
   font-weight: 700;
