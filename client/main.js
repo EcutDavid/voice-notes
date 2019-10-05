@@ -2,10 +2,13 @@ const loginBtn = document.querySelector("#loginBtn");
 const logoutBtn = document.querySelector("#logoutBtn");
 const noteForm = document.querySelector("#noteForm");
 const submitTextBtn = document.querySelector("#submitTextBtn");
+const submitTextSpinner = document.querySelector("#submitTextSpinner");
 const heading = document.querySelector(".cover-heading");
 const titleInput = document.querySelector("#titleInput");
 const contentInput = document.querySelector("#contentInput");
 const API_URL_BASE = "https://davidguan.app";
+// TODO(inject URL via build tool)
+// const API_URL_BASE = "http://localhost:8080";
 
 function genHeaders({ acc }) {
   const headers = {};
@@ -22,6 +25,8 @@ function setupNoteForm(acc) {
     const title = titleInput.value;
     const content = contentInput.value;
     const postBody = JSON.stringify({ title, content });
+    submitTextSpinner.style.display = "inline-block";
+    submitTextBtn.style.display = "none";
     fetch(`${API_URL_BASE}/voice-notes`, {
       method: "POST",
       headers: {
@@ -29,6 +34,9 @@ function setupNoteForm(acc) {
         "Content-Type": "application/json"
       },
       body: postBody
+    }).then(() => {
+      submitTextBtn.style.display = "inline-block";
+      submitTextSpinner.style.display = "none";
     });
   });
 }
