@@ -6,9 +6,12 @@ const submitTextSpinner = document.querySelector("#submitTextSpinner");
 const heading = document.querySelector(".cover-heading");
 const titleInput = document.querySelector("#titleInput");
 const contentInput = document.querySelector("#contentInput");
-const API_URL_BASE = "https://davidguan.app";
+const notesContainer = document.querySelector("#notes");
+const audio = document.querySelector("audio");
+// const API_URL_BASE = "https://davidguan.app";
 // TODO(inject URL via build tool)
-// const API_URL_BASE = "http://localhost:8080";
+const API_URL_BASE = "http://localhost:8080";
+const BUCKET_URL = "https://voice-notes-app.s3-ap-southeast-2.amazonaws.com";
 
 function genHeaders({ acc }) {
   const headers = {};
@@ -38,6 +41,24 @@ function setupNoteForm(acc) {
       submitTextBtn.style.display = "inline-block";
       submitTextSpinner.style.display = "none";
     });
+  });
+  fetch(`${API_URL_BASE}/voice-notes`, {
+    headers: {
+      ...genHeaders({ acc })
+    }
+  }).then((ret) => ret.json())
+  .then(notes => {
+    notes.forEach(d => {
+      const button = document.createElement("button");
+      button.innerText = d.name;
+      button.className = "btn btn-outline-primary";
+      const url = `${BUCKET_URL}/${d.key}`;
+      button.addEventListener("click", () => {
+        audio.src = url;
+        audio.play();
+      });
+      notesContainer.append(button);
+    })
   });
 }
 

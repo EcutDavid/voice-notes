@@ -5,7 +5,7 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const JwksClient = require("jwks-rsa");
 
-const { createVoiceNote } = require("./voice-notes");
+const { createVoiceNote, getVoiceNotes } = require("./voice-notes");
 
 const app = express();
 const jsonParser = bodyParser.json();
@@ -81,6 +81,17 @@ app.post("/voice-notes", validateRequest, jsonParser, (req, res) => {
   }
   createVoiceNote(title, content, req.appUserId)
     .then(() => { res.end(); })
+    .catch(() => {
+      res.statusCode = 500;
+      res.end("Internal Server Error");
+    });
+});
+
+app.get("/voice-notes", validateRequest, (req, res) => {
+  getVoiceNotes(req.appUserId)
+    .then(notes => {
+      res.end(JSON.stringify(notes));
+    })
     .catch(() => {
       res.statusCode = 500;
       res.end("Internal Server Error");

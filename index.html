@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Voice Notes App</title>
+    <title>Voice Notes</title>
     <link
       crossorigin="anonymous"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -18,23 +18,22 @@
   <body class="text-center">
     <div class="app-container">
       <header class="masthead mb-auto">
-        <div class="inner">
-          <h3>Voice Notes</h3>
-          <nav class="nav nav-masthead justify-content-center">
-            <a class="nav-link active" href="#">Home</a>
-          </nav>
-        </div>
-      </header>
-
-      <main role="main" class="inner cover">
         <h2 class="cover-heading"></h2>
-        <br />
         <button id="loginBtn" class="btn btn-lg btn-secondary" disabled="true">
           Login
         </button>
         <button id="logoutBtn" class="btn btn-lg btn-secondary" disabled="true">
           Logout
         </button>
+        <div class="inner">
+          <nav class="nav nav-masthead justify-content-center">
+            <a class="nav-link active" href="#">Home</a>
+            <a class="nav-link" href="#">Submit New Note</a>
+          </nav>
+        </div>
+      </header>
+
+      <main role="main" class="inner cover">
         <form id="noteForm" style="display: none">
           <label for="title-input">Title</label>
           <div class="input-group">
@@ -56,6 +55,8 @@
           />
           <div id="submitTextSpinner" class="spinner-border"></div>
         </form>
+        <div id="notes"></div>
+        <audio src="" controls></audio>
       </main>
 
       <footer class="mastfoot mt-auto">
