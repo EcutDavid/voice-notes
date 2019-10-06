@@ -1,3 +1,4 @@
+// TODO: only display audio control after notes fetched and the user is whitelisted.
 const loginBtn = document.querySelector("#loginBtn");
 const logoutBtn = document.querySelector("#logoutBtn");
 const noteForm = document.querySelector("#noteForm");
@@ -67,7 +68,13 @@ function setupNoteForm(acc) {
       ...genHeaders({ acc })
     }
   })
-    .then(ret => ret.json())
+    .then(ret => {
+      if (ret.status != 200) {
+        // Update UI for admin stuff.
+        return []
+      }
+      return ret.json();
+    })
     .then(notes => {
       notes.forEach(d => {
         const button = document.createElement("button");
