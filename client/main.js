@@ -9,7 +9,7 @@ const contentInput = document.querySelector("#contentInput");
 const notesContainer = document.querySelector("#notes");
 const audio = document.querySelector("audio");
 // TODO(inject URL via build tool)
-const API_URL_BASE = "http://52.63.221.219:8080";
+const API_URL_BASE = "https://davidguan.app";
 // const API_URL_BASE = "http://localhost:8080";
 const BUCKET_URL = "https://voice-notes-app.s3-ap-southeast-2.amazonaws.com";
 const tabKeys = ["homeTab", "noteSubmitTab"];
