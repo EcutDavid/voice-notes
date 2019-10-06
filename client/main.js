@@ -12,6 +12,26 @@ const audio = document.querySelector("audio");
 const API_URL_BASE = "http://52.63.221.219:8080";
 // const API_URL_BASE = "http://localhost:8080";
 const BUCKET_URL = "https://voice-notes-app.s3-ap-southeast-2.amazonaws.com";
+const tabKeys = ["homeTab", "noteSubmitTab"];
+
+let activeTabContent = document.querySelector(`#homeTabContent`);
+let activeTabLink = document.querySelector(`#homeTabLink`);
+function setupTabs() {
+  for (const tab of tabKeys) {
+    const link = document.querySelector(`#${tab}Link`);
+    const content = document.querySelector(`#${tab}Content`);
+    link.addEventListener("click", () => {
+      activeTabContent.style.display = "none";
+      activeTabContent = content;
+      activeTabContent.style.display = "block";
+
+      activeTabLink.classList.remove("active");
+      activeTabLink = link;
+      activeTabLink.classList.add("active");
+    });
+  }
+}
+setupTabs();
 
 function genHeaders({ acc }) {
   const headers = {};
@@ -46,20 +66,21 @@ function setupNoteForm(acc) {
     headers: {
       ...genHeaders({ acc })
     }
-  }).then((ret) => ret.json())
-  .then(notes => {
-    notes.forEach(d => {
-      const button = document.createElement("button");
-      button.innerText = d.name;
-      button.className = "btn btn-outline-primary";
-      const url = `${BUCKET_URL}/${d.key}`;
-      button.addEventListener("click", () => {
-        audio.src = url;
-        audio.play();
+  })
+    .then(ret => ret.json())
+    .then(notes => {
+      notes.forEach(d => {
+        const button = document.createElement("button");
+        button.innerText = d.name;
+        button.className = "btn btn-outline-primary";
+        const url = `${BUCKET_URL}/${d.key}`;
+        button.addEventListener("click", () => {
+          audio.src = url;
+          audio.play();
+        });
+        notesContainer.append(button);
       });
-      notesContainer.append(button);
-    })
-  });
+    });
 }
 
 // TODO: inject config at build time when multi envs provisioned.
@@ -76,11 +97,9 @@ function updateAuthUi(auth0) {
     logoutBtn.disabled = !authed;
 
     if (authed) {
-      auth0
-        .getTokenSilently()
-        .then(acc => {
-          setupNoteForm(acc);
-        });
+      auth0.getTokenSilently().then(acc => {
+        setupNoteForm(acc);
+      });
 
       auth0.getUser().then(info => {
         if (info.nickname) {
