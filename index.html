@@ -21,10 +21,10 @@
         <div class="cover-heading">
           <h2></h2>
           <button id="loginBtn" class="btn btn-secondary" disabled="true">
-            Login
+            Log in or sign up
           </button>
           <button id="logoutBtn" class="btn btn-secondary" disabled="true">
-            Logout
+            Log out
           </button>
         </div>
         <nav class="nav nav-masthead">
@@ -34,9 +34,11 @@
       </header>
 
       <main role="main" class="inner cover">
-        <div id="homeTabContent">
+        <div id="homeTabContent" style="display: none">
+          <div id="notesSpinner"class="spinner-border"></div>
           <div class="notes" id="notes"></div>
-          <audio src="" controls></audio>
+          <p id="homeTabTextPrompt"></p>
+          <audio style="display: none;" controls></audio>
         </div>
         <div id="noteSubmitTabContent" style="display: none">
           <form id="noteForm" style="display: none">
@@ -58,7 +60,7 @@
               type="submit"
               class="btn btn-lg btn-secondary"
             />
-            <div id="submitTextSpinner" class="spinner-border"></div>
+            <div id="submitTextSpinner" class="spinner-border" style="display: none"></div>
           </form>
         </div>
       </main>

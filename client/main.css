@@ -68,10 +68,6 @@ main {
   margin-bottom: 10px;
 }
 
-#submitTextSpinner {
-  display: none;
-}
-
 .nav-masthead {
   margin: 10px;
 }
@@ -100,6 +96,12 @@ main {
 
 @media (min-width: 48em) {
 
+}
+
+#homeTabContent .spinner-border {
+  margin: 30px;
+  width: 80px;
+  height: 80px;
 }
 
 .notes {

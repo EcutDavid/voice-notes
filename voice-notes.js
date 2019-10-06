@@ -20,7 +20,7 @@ async function createVoiceNote(title, content, userId) {
   // TOOD: improve as this bad logic means only one createVoiceNote can happen at a time.
   const notes = await getNotesInS3();
 
-  const result = await polly
+  let result = await polly
     .startSpeechSynthesisTask({
       ...pollyCommonParas,
       Text: content
@@ -33,6 +33,17 @@ async function createVoiceNote(title, content, userId) {
   // and return the result only after that.
   notes.push({ name: title, key: `${taskId}.mp3`, userId: userId });
   console.log("Successfully sent a Polly task for ", title, "at:", new Date());
+
+  let status = "";
+  while (status != "completed") {
+    result = await polly.getSpeechSynthesisTask({ TaskId: taskId }).promise();
+    status = result.SynthesisTask.TaskStatus;
+    console.log("Polly task status:", status, "id:", taskId, "at:", new Date());
+    await new Promise(res => {
+      setTimeout(() => res(), 200);
+    });
+  }
+  console.log("Successfully finished a Polly task for ", title, "at:", new Date());
 
   await s3
     .putObject({
