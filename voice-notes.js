@@ -43,6 +43,13 @@ async function createVoiceNote(title, content, userId) {
     .promise();
 }
 
+async function getVoiceNotes(userId) {
+  const notes = await getNotesInS3();
+
+  return notes.filter(d => d.userId === userId)
+    .map(d => ({ name: d.name, key: d.key }));
+}
+
 async function getNotesInS3() {
   try {
     const manifest = await s3
@@ -62,3 +69,4 @@ async function getNotesInS3() {
 }
 
 module.exports.createVoiceNote = createVoiceNote;
+module.exports.getVoiceNotes = getVoiceNotes;
