@@ -12,8 +12,8 @@ const notesContainer = document.querySelector("#notes");
 const notesSpinner = document.querySelector("#notesSpinner");
 const audio = document.querySelector("audio");
 // TODO(inject URL via build tool)
-// const API_URL_BASE = "https://davidguan.app";
-const API_URL_BASE = "http://localhost:8080";
+const API_URL_BASE = "https://davidguan.app";
+// const API_URL_BASE = "http://localhost:8080";
 const BUCKET_URL = "https://voice-notes-app.s3-ap-southeast-2.amazonaws.com";
 const tabKeys = ["homeTab", "noteSubmitTab"];
 
@@ -118,6 +118,7 @@ function updateAuthUi(auth0) {
     logoutBtn.disabled = !authed;
 
     if (authed) {
+      activeTabContent.style.display = "block";
       auth0.getTokenSilently().then(acc => {
         setupNoteForm(acc);
       });

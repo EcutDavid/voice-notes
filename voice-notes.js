@@ -35,7 +35,6 @@ async function createVoiceNote(title, content, userId) {
   console.log("Successfully sent a Polly task for ", title, "at:", new Date());
 
   let status = "";
-
   while (status != "completed") {
     result = await polly.getSpeechSynthesisTask({ TaskId: taskId }).promise();
     status = result.SynthesisTask.TaskStatus;
@@ -44,8 +43,8 @@ async function createVoiceNote(title, content, userId) {
       setTimeout(() => res(), 200);
     });
   }
-
   console.log("Successfully finished a Polly task for ", title, "at:", new Date());
+
   await s3
     .putObject({
       ...s3CommonParas,
