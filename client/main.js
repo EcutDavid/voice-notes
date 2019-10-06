@@ -14,8 +14,8 @@ const API_URL_BASE = "http://52.63.221.219:8080";
 const BUCKET_URL = "https://voice-notes-app.s3-ap-southeast-2.amazonaws.com";
 const tabKeys = ["homeTab", "noteSubmitTab"];
 
-let activeTabContent = document.querySelector(`#homeTabContent`);
-let activeTabLink = document.querySelector(`#homeTabLink`);
+let activeTabContent = document.querySelector("#homeTabContent");
+let activeTabLink = document.querySelector("#homeTabLink");
 function setupTabs() {
   for (const tab of tabKeys) {
     const link = document.querySelector(`#${tab}Link`);
