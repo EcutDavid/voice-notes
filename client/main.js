@@ -3,7 +3,7 @@ const logoutBtn = document.querySelector("#logoutBtn");
 const noteForm = document.querySelector("#noteForm");
 const submitTextBtn = document.querySelector("#submitTextBtn");
 const submitTextSpinner = document.querySelector("#submitTextSpinner");
-const heading = document.querySelector(".cover-heading");
+const heading = document.querySelector(".cover-heading h2");
 const titleInput = document.querySelector("#titleInput");
 const contentInput = document.querySelector("#contentInput");
 const notesContainer = document.querySelector("#notes");
@@ -72,7 +72,7 @@ function setupNoteForm(acc) {
       notes.forEach(d => {
         const button = document.createElement("button");
         button.innerText = d.name;
-        button.className = "btn btn-outline-primary";
+        button.className = "btn btn-outline-primary note";
         const url = `${BUCKET_URL}/${d.key}`;
         button.addEventListener("click", () => {
           audio.src = url;
@@ -103,7 +103,7 @@ function updateAuthUi(auth0) {
 
       auth0.getUser().then(info => {
         if (info.nickname) {
-          heading.innerText = `Hello ${info.nickname}`;
+          heading.innerText = `Hello, ${info.nickname}`;
         }
       });
     }

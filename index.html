@@ -18,24 +18,24 @@
   <body class="text-center">
     <div class="app-container">
       <header class="masthead mb-auto">
-        <h2 class="cover-heading"></h2>
-        <button id="loginBtn" class="btn btn-lg btn-secondary" disabled="true">
-          Login
-        </button>
-        <button id="logoutBtn" class="btn btn-lg btn-secondary" disabled="true">
-          Logout
-        </button>
-        <div class="inner">
-          <nav class="nav nav-masthead justify-content-center">
-            <a class="nav-link active" href="#" id="homeTabLink">Home</a>
-            <a class="nav-link" href="#" id="noteSubmitTabLink">Submit New Note</a>
-          </nav>
+        <div class="cover-heading">
+          <h2></h2>
+          <button id="loginBtn" class="btn btn-secondary" disabled="true">
+            Login
+          </button>
+          <button id="logoutBtn" class="btn btn-secondary" disabled="true">
+            Logout
+          </button>
         </div>
+        <nav class="nav nav-masthead">
+          <a class="nav-link active" href="#" id="homeTabLink">Notes</a>
+          <a class="nav-link" href="#" id="noteSubmitTabLink">Submit New Note</a>
+        </nav>
       </header>
 
       <main role="main" class="inner cover">
         <div id="homeTabContent">
-          <div id="notes"></div>
+          <div class="notes" id="notes"></div>
           <audio src="" controls></audio>
         </div>
         <div id="noteSubmitTabContent" style="display: none">
