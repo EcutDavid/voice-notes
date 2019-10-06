@@ -5,13 +5,15 @@ const noteForm = document.querySelector("#noteForm");
 const submitTextBtn = document.querySelector("#submitTextBtn");
 const submitTextSpinner = document.querySelector("#submitTextSpinner");
 const heading = document.querySelector(".cover-heading h2");
+const homeTabTextPrompt = document.querySelector("#homeTabTextPrompt");
 const titleInput = document.querySelector("#titleInput");
 const contentInput = document.querySelector("#contentInput");
 const notesContainer = document.querySelector("#notes");
+const notesSpinner = document.querySelector("#notesSpinner");
 const audio = document.querySelector("audio");
 // TODO(inject URL via build tool)
-const API_URL_BASE = "https://davidguan.app";
-// const API_URL_BASE = "http://localhost:8080";
+// const API_URL_BASE = "https://davidguan.app";
+const API_URL_BASE = "http://localhost:8080";
 const BUCKET_URL = "https://voice-notes-app.s3-ap-southeast-2.amazonaws.com";
 const tabKeys = ["homeTab", "noteSubmitTab"];
 
@@ -60,6 +62,8 @@ function setupNoteForm(acc) {
       body: postBody
     }).then(() => {
       submitTextBtn.style.display = "inline-block";
+      titleInput.value = "";
+      contentInput.value = "";
       submitTextSpinner.style.display = "none";
     });
   });
@@ -70,13 +74,23 @@ function setupNoteForm(acc) {
   })
     .then(ret => {
       if (ret.status != 200) {
-        // Update UI for admin stuff.
-        return []
+        notesSpinner.style.display = "none";
+        homeTabTextPrompt.innerText =
+          "Sorry, this app is in the early test stage, only a small list of accounts are allowed to interacting with the APIs, please ask davidguandev@gmail.com to add your account, if you are interested to give it a go, thanks!";
       }
       return ret.json();
     })
-    .then(notes => {
-      notes.forEach(d => {
+    .then(ret => {
+      if (!Array.isArray(ret)) {
+        return;
+      }
+      notesSpinner.style.display = "none";
+      if (ret.length == 0) {
+        homeTabTextPrompt.innerText = "Thanks for using this app, please click \"submit new note\" to create your first note :)";
+        return;
+      }
+      audio.style.display = "block";
+      ret.forEach(d => {
         const button = document.createElement("button");
         button.innerText = d.name;
         button.className = "btn btn-outline-primary note";

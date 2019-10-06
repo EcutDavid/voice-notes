@@ -102,6 +102,12 @@ main {
 
 }
 
+#homeTabContent .spinner-border {
+  margin: 30px;
+  width: 80px;
+  height: 80px;
+}
+
 .notes {
   display: flex;
   flex-direction: column;
