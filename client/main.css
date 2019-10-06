@@ -69,6 +69,7 @@ main {
 }
 
 .nav-masthead {
+  clear: both;
   margin: 10px;
 }
 
