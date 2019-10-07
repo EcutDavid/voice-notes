@@ -1,4 +1,4 @@
-// TODO: add logging
+// TODO: add proper logging(e.g., sentry.io).
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const express = require("express");
@@ -12,20 +12,13 @@ const jsonParser = bodyParser.json();
 
 const port = process.env.PORT || 8080;
 
-const jwksClient = JwksClient({
-  jwksUri: "https://davidguan.auth0.com/.well-known/jwks.json"
-});
 // TODO: inject config at build time when multi envs provisioned.
 const auth0Conifg = {
   domain: "davidguan.auth0.com",
-  audience: "https://davidguan.app/voice-notes-app/api"
+  audience: "https://davidguan.app/voice-notes-app/api",
+  jwksUri: "https://davidguan.auth0.com/.well-known/jwks.json"
 };
-const jwtOptions = {
-  audience: auth0Conifg.audience,
-  issuer: `https://${auth0Conifg.domain}/`,
-  algorithm: ["RS256"]
-};
-
+const jwksClient = JwksClient({ jwksUri: auth0Conifg.jwksUri });
 function getJwtKey(header, callback) {
   jwksClient.getSigningKey(header.kid, function(err, key) {
     const signingKey = key.publicKey || key.rsaPublicKey;
@@ -55,36 +48,42 @@ const allowedSubs = new Set([
 ]);
 
 app.use(cors(corsOptions));
-const validateRequest = function(req, res, next) {
-  res.statusCode = 401;
 
+const jwtOptions = {
+  audience: auth0Conifg.audience,
+  issuer: `https://${auth0Conifg.domain}/`,
+  algorithm: ["RS256"]
+};
+function validateRequest(req, res, next) {
   const authParts = (req.headers["authorization"] || "").split(" ");
   if (authParts.length === 2 && authParts[0] === "Bearer") {
     jwt.verify(authParts[1], getJwtKey, jwtOptions, (err, decoded) => {
       if (err) {
+        res.statusCode = 401;
         res.send({ msg: "Unauthorized" });
         return;
       }
       if (!allowedSubs.has(decoded.sub)) {
+        res.statusCode = 401;
         res.send({ msg: "Sub Not Allowed" });
-        console.log(
-          "Request for unallowed auth0 subject:",
-          decoded.sub,
-          "at:",
-          new Date()
-        );
+        console.log("Request for unallowed:", decoded.sub, "at:", new Date());
         return;
       }
-      console.log("Successfully decoded a JWT token for ", decoded.sub, "at:", new Date());
-      req.appUserId = decoded.sub;
-
-      res.statusCode = 200;
+      console.log(
+        "Successfully decoded a JWT for",
+        decoded.sub,
+        "at:",
+        new Date()
+      );
+      req.userId = decoded.sub;
       next();
     });
     return;
   }
+
+  res.statusCode = 401;
   res.send({ msg: "Unauthorized" });
-};
+}
 
 app.post("/voice-notes", validateRequest, jsonParser, (req, res) => {
   const { content, title } = req.body;
@@ -92,8 +91,10 @@ app.post("/voice-notes", validateRequest, jsonParser, (req, res) => {
     res.statusCode = 400;
     return res.send({ msg: "Bad Request" });
   }
-  createVoiceNote(title, content, req.appUserId)
-    .then(() => { res.send(); })
+  createVoiceNote(title, content, req.userId)
+    .then(() => {
+      res.send();
+    })
     .catch(() => {
       res.statusCode = 500;
       res.send({ msg: "Internal Server Error" });
@@ -101,7 +102,7 @@ app.post("/voice-notes", validateRequest, jsonParser, (req, res) => {
 });
 
 app.get("/voice-notes", validateRequest, (req, res) => {
-  getVoiceNotes(req.appUserId)
+  getVoiceNotes(req.userId)
     .then(notes => {
       res.send(notes);
     })
