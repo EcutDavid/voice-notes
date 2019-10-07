@@ -138,16 +138,16 @@ createAuth0Client({
   audience: auth0Conifg.audience
 }).then(auth0 => {
   updateAuthUi(auth0);
-  const pageCur = location.origin + location.pathname;
+  const currentPage = location.origin + location.pathname;
   loginBtn.addEventListener("click", () => {
     auth0.loginWithRedirect({
-      redirect_uri: pageCur
+      redirect_uri: currentPage
     });
   });
 
   logoutBtn.addEventListener("click", () => {
     auth0.logout({
-      returnTo: pageCur
+      returnTo: currentPage
     });
   });
 
