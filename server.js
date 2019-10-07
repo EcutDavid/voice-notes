@@ -16,7 +16,6 @@ const jwksClient = JwksClient({
   jwksUri: "https://davidguan.auth0.com/.well-known/jwks.json"
 });
 // TODO: inject config at build time when multi envs provisioned.
-// (and prevent the two copies of config).
 const auth0Conifg = {
   domain: "davidguan.auth0.com",
   audience: "https://davidguan.app/voice-notes-app/api"

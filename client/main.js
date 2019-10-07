@@ -152,7 +152,6 @@ createAuth0Client({
   });
 
   const query = location.search;
-  // Back from the login page.
   if (query.includes("code=") && query.includes("state=")) {
     auth0.handleRedirectCallback().then(() => {
       history.replaceState(
