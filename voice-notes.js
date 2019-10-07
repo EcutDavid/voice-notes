@@ -31,6 +31,8 @@ async function createVoiceNote(title, content, userId) {
   notes.push({ name: title, key: `${taskId}.mp3`, userId: userId });
   console.log("Successfully sent a Polly task for ", title, "at:", new Date());
 
+  // TODO: separate state pulling out of this method,
+  // as this part is very time consuming, might cause a request timeout.
   let status = "";
   while (status != "completed") {
     result = await polly.getSpeechSynthesisTask({ TaskId: taskId }).promise();
