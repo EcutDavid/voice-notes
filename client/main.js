@@ -157,7 +157,7 @@ createAuth0Client({
       history.replaceState(
         {},
         document.title,
-        location.origin + location.pathname
+        currentPage
       );
       updateAuthUi(auth0);
     });
