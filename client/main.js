@@ -1,3 +1,4 @@
+import "./main.css";
 // TODO: only display audio control after notes fetched and the user is whitelisted.
 const loginBtn = document.querySelector("#loginBtn");
 const logoutBtn = document.querySelector("#logoutBtn");
