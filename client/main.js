@@ -112,7 +112,7 @@ const auth0Conifg = {
   audience: "https://davidguan.app/voice-notes-app/api"
 };
 
-function updateAuthUi(auth0) {
+function updateUi(auth0) {
   auth0.isAuthenticated().then(authed => {
     loginBtn.disabled = authed;
     logoutBtn.disabled = !authed;
@@ -137,7 +137,7 @@ createAuth0Client({
   client_id: auth0Conifg.clientId,
   audience: auth0Conifg.audience
 }).then(auth0 => {
-  updateAuthUi(auth0);
+  updateUi(auth0);
   const currentPage = location.origin + location.pathname;
   loginBtn.addEventListener("click", () => {
     auth0.loginWithRedirect({
@@ -159,7 +159,7 @@ createAuth0Client({
         document.title,
         currentPage
       );
-      updateAuthUi(auth0);
+      updateUi(auth0);
     });
   }
 
