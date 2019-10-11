@@ -12,12 +12,7 @@ const notesContainer = document.querySelector("#notes");
 const notesSpinner = document.querySelector("#notesSpinner");
 const audio = document.querySelector("audio");
 
-// TODO(inject URL via build tool)
-const API_URL_BASE = "https://davidguan.app";
-// const API_URL_BASE = "http://localhost:8080";
-const BUCKET_URL = "https://voice-notes-app.s3-ap-southeast-2.amazonaws.com";
 const tabKeys = ["homeTab", "noteSubmitTab"];
-
 let activeTabContent = document.querySelector("#homeTabContent");
 let activeTabLink = document.querySelector("#homeTabLink");
 function setupTabs() {
@@ -96,7 +91,7 @@ function setupNoteForm(acc) {
         const button = document.createElement("button");
         button.innerText = d.name;
         button.className = "btn btn-outline-primary note";
-        const url = `${BUCKET_URL}/${d.key}`;
+        const url = `${S3_BUCKET_URL}/${d.key}`;
         button.addEventListener("click", () => {
           audio.src = url;
           audio.play();

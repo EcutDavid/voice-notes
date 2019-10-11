@@ -2,6 +2,7 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin")
 const path = require("path");
+const webpack = require("webpack");
 
 module.exports = {
   entry: "./client/main.js",
@@ -34,6 +35,10 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin(),
+    new webpack.DefinePlugin({
+      API_URL_BASE: JSON.stringify(process.env.API_URL_BASE || "https://davidguan.app"),
+      S3_BUCKET_URL: JSON.stringify(process.env.S3_BUCKET_URL || "https://voice-notes-app.s3-ap-southeast-2.amazonaws.com")
+    }),
     new MiniCssExtractPlugin({
       // Options similar to the same options in webpackOptions.output
       // all options are optional
