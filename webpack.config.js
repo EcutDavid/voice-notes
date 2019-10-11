@@ -1,6 +1,6 @@
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const HtmlWebpackPlugin = require("html-webpack-plugin")
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 const path = require("path");
 const webpack = require("webpack");
 
@@ -12,7 +12,7 @@ module.exports = {
         test: /\.css$/,
         use: [
           {
-            loader: MiniCssExtractPlugin.loader,
+            loader: MiniCssExtractPlugin.loader
           },
           "css-loader"
         ]
@@ -36,8 +36,18 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(),
     new webpack.DefinePlugin({
-      API_URL_BASE: JSON.stringify(process.env.API_URL_BASE || "https://davidguan.app"),
-      S3_BUCKET_URL: JSON.stringify(process.env.S3_BUCKET_URL || "https://voice-notes-app.s3-ap-southeast-2.amazonaws.com")
+      API_URL_BASE: JSON.stringify(
+        process.env.API_URL_BASE || "https://davidguan.app"
+      ),
+      S3_BUCKET_URL: JSON.stringify(
+        process.env.S3_BUCKET_URL ||
+          "https://voice-notes-app.s3-ap-southeast-2.amazonaws.com"
+      ),
+      auth0Conifg: JSON.stringify({
+        domain: "davidguan.auth0.com",
+        clientId: "luC7PVwEEmjBTCC3HUenRepY5U3Zgrru",
+        audience: "https://davidguan.app/voice-notes-app/api"
+      })
     }),
     new MiniCssExtractPlugin({
       // Options similar to the same options in webpackOptions.output

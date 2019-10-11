@@ -105,14 +105,6 @@ function setupNoteForm(acc) {
     });
 }
 
-// TODO: inject config at build time when multi envs provisioned.
-// (and prevent the two copies of config).
-const auth0Conifg = {
-  domain: "davidguan.auth0.com",
-  clientId: "luC7PVwEEmjBTCC3HUenRepY5U3Zgrru",
-  audience: "https://davidguan.app/voice-notes-app/api"
-};
-
 function updateUi(auth0) {
   auth0.isAuthenticated().then(authed => {
     loginBtn.disabled = authed;
