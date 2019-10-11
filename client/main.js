@@ -1,5 +1,4 @@
 import "./main.css";
-// TODO: only display audio control after notes fetched and the user is whitelisted.
 const loginBtn = document.querySelector("#loginBtn");
 const logoutBtn = document.querySelector("#logoutBtn");
 const noteForm = document.querySelector("#noteForm");
@@ -12,6 +11,7 @@ const contentInput = document.querySelector("#contentInput");
 const notesContainer = document.querySelector("#notes");
 const notesSpinner = document.querySelector("#notesSpinner");
 const audio = document.querySelector("audio");
+
 // TODO(inject URL via build tool)
 const API_URL_BASE = "https://davidguan.app";
 // const API_URL_BASE = "http://localhost:8080";
@@ -47,6 +47,7 @@ function genHeaders({ acc }) {
 
 function setupNoteForm(acc) {
   noteForm.style.display = "block";
+  notesSpinner.style.display = "block";
   submitTextBtn.addEventListener("click", event => {
     event.preventDefault();
     const title = titleInput.value;
@@ -102,6 +103,10 @@ function setupNoteForm(acc) {
         });
         notesContainer.append(button);
       });
+    })
+    .catch(e => {
+      notesSpinner.style.display = "none";
+      throw e;
     });
 }
 
@@ -119,7 +124,6 @@ function updateUi(auth0) {
     logoutBtn.disabled = !authed;
 
     if (authed) {
-      activeTabContent.style.display = "block";
       auth0.getTokenSilently().then(acc => {
         setupNoteForm(acc);
       });
