@@ -43,18 +43,15 @@ module.exports = {
         process.env.S3_BUCKET_URL ||
           "https://voice-notes-app.s3-ap-southeast-2.amazonaws.com"
       ),
-      auth0Conifg: JSON.stringify({
+      AUTH0_CONFIG: JSON.stringify({
         domain: "davidguan.auth0.com",
         clientId: "luC7PVwEEmjBTCC3HUenRepY5U3Zgrru",
         audience: "https://davidguan.app/voice-notes-app/api"
       })
     }),
     new MiniCssExtractPlugin({
-      // Options similar to the same options in webpackOptions.output
-      // all options are optional
       filename: "[name].[hash].css",
       chunkFilename: "[id].css",
-      ignoreOrder: false // Enable to remove warnings about conflicting order
     }),
     new HtmlWebpackPlugin({
       template: "client/index.template.html",

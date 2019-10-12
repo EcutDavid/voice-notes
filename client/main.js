@@ -1,4 +1,6 @@
+import { AuthClient }  from "./auth.js";
 import "./main.css";
+
 const loginBtn = document.querySelector("#loginBtn");
 const logoutBtn = document.querySelector("#logoutBtn");
 const noteForm = document.querySelector("#noteForm");
@@ -105,55 +107,32 @@ function setupNoteForm(acc) {
     });
 }
 
-function updateUi(auth0) {
-  auth0.isAuthenticated().then(authed => {
+const authClient = new AuthClient();
+function updateUi(authClient) {
+  authClient.queryIsAuthenticated().then(authed => {
     loginBtn.disabled = authed;
     logoutBtn.disabled = !authed;
 
-    if (authed) {
-      auth0.getTokenSilently().then(acc => {
-        setupNoteForm(acc);
-      });
-
-      auth0.getUser().then(info => {
-        if (info.nickname) {
-          heading.innerText = `Hello, ${info.nickname}`;
-        }
-      });
+    if (!authed) {
+      return;
     }
+    authClient.queryAccToken().then(acc => {
+      setupNoteForm(acc);
+    });
+
+    authClient.queryNickName().then(nickname => {
+      if (!nickname) return;
+      heading.innerText = `Hello, ${nickname}`;
+    });
   });
 }
-
-createAuth0Client({
-  domain: auth0Conifg.domain,
-  client_id: auth0Conifg.clientId,
-  audience: auth0Conifg.audience
-}).then(auth0 => {
-  updateUi(auth0);
-  const currentPage = location.origin + location.pathname;
+authClient.init().then(() => {
+  updateUi(authClient);
   loginBtn.addEventListener("click", () => {
-    auth0.loginWithRedirect({
-      redirect_uri: currentPage
-    });
+    authClient.login();
   });
 
   logoutBtn.addEventListener("click", () => {
-    auth0.logout({
-      returnTo: currentPage
-    });
+    authClient.logout();
   });
-
-  const query = location.search;
-  if (query.includes("code=") && query.includes("state=")) {
-    auth0.handleRedirectCallback().then(() => {
-      history.replaceState(
-        {},
-        document.title,
-        currentPage
-      );
-      updateUi(auth0);
-    });
-  }
-
-  // TODO: handle the auth error case(query string would give clue).
 });
