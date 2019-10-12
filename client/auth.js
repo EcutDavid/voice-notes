@@ -23,8 +23,6 @@ export class AuthClient {
       }
       return;
     });
-
-    // TODO: handle the auth error case(query string would give clue).
   }
 
   getCurrentPage() {

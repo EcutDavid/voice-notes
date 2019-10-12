@@ -66,6 +66,11 @@ function submitNote(acc, noteSet) {
 }
 
 function updateMainTabContent(acc, noteSet) {
+  if (location.search.includes("error=")) {
+    notesSpinner.style.display = "none";
+    homeTabTextPrompt.innerText = messages.errorCodePrompt();
+    return;
+  }
   fetch(`${API_URL_BASE}/voice-notes`, {
     headers: {
       ...genHeaders({ acc })
