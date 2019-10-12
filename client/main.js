@@ -1,4 +1,5 @@
 import { AuthClient }  from "./auth.js";
+import messages from './messages.js';
 import "./main.css";
 
 const loginBtn = document.querySelector("#loginBtn");
@@ -42,30 +43,29 @@ function genHeaders({ acc }) {
   return headers;
 }
 
-function setupNoteForm(acc) {
-  noteForm.style.display = "block";
-  notesSpinner.style.display = "block";
-  submitTextBtn.addEventListener("click", event => {
-    event.preventDefault();
-    const title = titleInput.value;
-    const content = contentInput.value;
-    const postBody = JSON.stringify({ title, content });
-    submitTextSpinner.style.display = "inline-block";
-    submitTextBtn.style.display = "none";
-    fetch(`${API_URL_BASE}/voice-notes`, {
-      method: "POST",
-      headers: {
-        ...genHeaders({ acc }),
-        "Content-Type": "application/json"
-      },
-      body: postBody
-    }).then(() => {
-      submitTextBtn.style.display = "inline-block";
-      titleInput.value = "";
-      contentInput.value = "";
-      submitTextSpinner.style.display = "none";
-    });
+function submitNote(acc, noteSet) {
+  const title = titleInput.value;
+  const content = contentInput.value;
+  const postBody = JSON.stringify({ title, content });
+  submitTextSpinner.style.display = "inline-block";
+  submitTextBtn.style.display = "none";
+  fetch(`${API_URL_BASE}/voice-notes`, {
+    method: "POST",
+    headers: {
+      ...genHeaders({ acc }),
+      "Content-Type": "application/json"
+    },
+    body: postBody
+  }).then(() => {
+    submitTextBtn.style.display = "inline-block";
+    titleInput.value = "";
+    contentInput.value = "";
+    submitTextSpinner.style.display = "none";
+    updateMainTabContent(acc, noteSet)
   });
+}
+
+function updateMainTabContent(acc, noteSet) {
   fetch(`${API_URL_BASE}/voice-notes`, {
     headers: {
       ...genHeaders({ acc })
@@ -74,8 +74,7 @@ function setupNoteForm(acc) {
     .then(ret => {
       if (ret.status != 200) {
         notesSpinner.style.display = "none";
-        homeTabTextPrompt.innerText =
-          "Sorry, this app is in the early test stage, only a small list of accounts are allowed to interacting with the APIs, please ask davidguandev@gmail.com to add your account, if you are interested to give it a go, thanks!";
+        homeTabTextPrompt.innerText = messages.apiWhiteListPrompt();
       }
       return ret.json();
     })
@@ -85,11 +84,13 @@ function setupNoteForm(acc) {
       }
       notesSpinner.style.display = "none";
       if (ret.length == 0) {
-        homeTabTextPrompt.innerText = "Thanks for using this app, please click \"submit new note\" to create your first note :)";
+        homeTabTextPrompt.innerText = messages.nonNotePrompt();
         return;
       }
       audio.style.display = "block";
       ret.forEach(d => {
+        if (noteSet.has(d.key)) return;
+        noteSet.add(d.key);
         const button = document.createElement("button");
         button.innerText = d.name;
         button.className = "btn btn-outline-primary note";
@@ -107,6 +108,18 @@ function setupNoteForm(acc) {
     });
 }
 
+function setupNoteForm(acc) {
+  const noteSet = new Set();
+  noteForm.style.display = "block";
+  notesSpinner.style.display = "block";
+  submitTextBtn.addEventListener("click", event => {
+    event.preventDefault();
+    submitNote(acc, noteSet);
+  });
+
+  updateMainTabContent(acc, noteSet);
+}
+
 const authClient = new AuthClient();
 function updateUi(authClient) {
   authClient.queryIsAuthenticated().then(authed => {
@@ -122,7 +135,7 @@ function updateUi(authClient) {
 
     authClient.queryNickName().then(nickname => {
       if (!nickname) return;
-      heading.innerText = `Hello, ${nickname}`;
+      heading.innerText = messages.welcome(nickname);
     });
   });
 }
