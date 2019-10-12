@@ -1,5 +1,5 @@
 import { AuthClient }  from "./auth.js";
-import messages from './messages.js';
+import messages from "./messages.js";
 import "./main.css";
 
 const loginBtn = document.querySelector("#loginBtn");
@@ -8,6 +8,7 @@ const noteForm = document.querySelector("#noteForm");
 const submitTextBtn = document.querySelector("#submitTextBtn");
 const submitTextSpinner = document.querySelector("#submitTextSpinner");
 const heading = document.querySelector(".cover-heading h2");
+const homeTabLink = document.querySelector("#homeTabLink");
 const homeTabTextPrompt = document.querySelector("#homeTabTextPrompt");
 const titleInput = document.querySelector("#titleInput");
 const contentInput = document.querySelector("#contentInput");
@@ -65,10 +66,20 @@ function submitNote(acc, noteSet) {
   });
 }
 
+function forceHomeTab() {
+  notesContainer.style.display = "none";
+  homeTabLink.click();
+  for (const tab of tabKeys) {
+    const link = document.querySelector(`#${tab}Link`);
+    link.style.visibility = "hidden";
+  }
+}
+
 function updateMainTabContent(acc, noteSet) {
   if (location.search.includes("error=")) {
     notesSpinner.style.display = "none";
     homeTabTextPrompt.innerText = messages.errorCodePrompt();
+    forceHomeTab();
     return;
   }
   fetch(`${API_URL_BASE}/voice-notes`, {
@@ -80,6 +91,7 @@ function updateMainTabContent(acc, noteSet) {
       if (ret.status != 200) {
         notesSpinner.style.display = "none";
         homeTabTextPrompt.innerText = messages.apiWhiteListPrompt();
+        forceHomeTab();
       }
       return ret.json();
     })
