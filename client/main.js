@@ -1,6 +1,5 @@
-import "./main.css";
-
 import { AuthClient }  from "./auth.js";
+import "./main.css";
 
 const loginBtn = document.querySelector("#loginBtn");
 const logoutBtn = document.querySelector("#logoutBtn");
