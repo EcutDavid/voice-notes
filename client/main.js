@@ -44,7 +44,7 @@ function genHeaders({ acc }) {
 
 function setupNoteForm(acc) {
   noteForm.style.display = "block";
-  notesSpinner.style.display = "inline-block";
+  notesSpinner.style.display = "block";
   submitTextBtn.addEventListener("click", event => {
     event.preventDefault();
     const title = titleInput.value;
