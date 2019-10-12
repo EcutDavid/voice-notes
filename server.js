@@ -5,6 +5,7 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const JwksClient = require("jwks-rsa");
 
+const { allowedSubs } = require("./white-list.js");
 const { createVoiceNote, getVoiceNotes } = require("./voice-notes");
 
 const app = express();
@@ -40,13 +41,6 @@ const corsOptions = {
     }
   }
 };
-
-const allowedSubs = new Set([
-  "auth0|5d969898d2c2620c5573aa4f",
-  "auth0|5d99b106f208d00e16ecb8ac",
-  "auth0|5d99b3db3521390e23f03689"
-]);
-
 app.use(cors(corsOptions));
 
 const jwtOptions = {
